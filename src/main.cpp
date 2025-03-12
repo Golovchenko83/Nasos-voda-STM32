@@ -17,10 +17,10 @@ GTimer lsd_led(MS);
 GTimer rash_litr(MS, 5000);
 GTimer Dallos(MS, 3000);
 Adafruit_SSD1306 display(OLED_RESET);
-HardwareTimer pwm1 TIM1; //Активируем таймер
+HardwareTimer pwm1 TIM1; // Активируем таймер
 
 float bar, set_bar, raz_bar, gist,
-           water, water_l, power, bar_lsd, dal_temp[2];
+    water, water_l, power, bar_lsd, dal_temp[2];
 
 int menu, up, down, rash_tik, bar_tik_lsd,
     A_bar, A_bar_s, tik, i, start, data[12];
@@ -82,7 +82,7 @@ void off()
   {
 
     delay(1000);
-    if (digitalRead(PB12)) //Down
+    if (digitalRead(PB12)) // Down
     {
       of++;
     }
@@ -98,7 +98,7 @@ void off()
   NVIC_SystemReset();
 }
 
-//Активность дисплея
+// Активность дисплея
 void lsd_led_fun(int t)
 {
   if (lsd_stat == 0)
@@ -129,7 +129,7 @@ void error_davlenie()
     for (size_t error = 0; error < 5;)
     {
       delay(1000);
-      if (digitalRead(PB14)) //Меню
+      if (digitalRead(PB14)) // Меню
       {
         error++;
       }
@@ -190,7 +190,7 @@ void error_temperatura()
     for (size_t error = 0; error < 5;)
     {
       delay(1000);
-      if (digitalRead(PB14)) //Меню
+      if (digitalRead(PB14)) // Меню
       {
         error++;
       }
@@ -224,7 +224,7 @@ void error_temperatura()
 
 void loop()
 {
-  //Дисплей текст
+  // Дисплей текст
   if (lsdup.isReady())
   {
 
@@ -311,7 +311,7 @@ void loop()
   }
   //*******************
 
-  if (menu_t.isReady()) //Обработка меню
+  if (menu_t.isReady()) // Обработка меню
   {
     menu_ok = 0;
     p_me = 0;
@@ -337,7 +337,7 @@ void loop()
   if (digital.isReady())
   {
 
-    if (digitalRead(PB14)) //Меню
+    if (digitalRead(PB14)) // Меню
     {
       lsd_led_fun(20000);
       menu_t.reset();
@@ -372,7 +372,7 @@ void loop()
       }
     }
 
-    if (digitalRead(PB13)) //Up
+    if (digitalRead(PB13)) // Up
     {
       lsd_led_fun(20000);
       menu_t.reset();
@@ -390,7 +390,7 @@ void loop()
         break;
       }
     }
-    if (digitalRead(PB12)) //Down
+    if (digitalRead(PB12)) // Down
     {
       lsd_led_fun(20000);
       menu_t.reset();
@@ -415,7 +415,7 @@ void loop()
         }
       }
     }
-    //Опрос датчика расхода воды
+    // Опрос датчика расхода воды
     if (digitalRead(PB7) && rash_stat == 0)
     {
       rash_stat = 1;
@@ -430,11 +430,11 @@ void loop()
     digital.setTimeout(30);
   }
 
-  //Считывание датчиков
+  // Считывание датчиков
   if (analog.isReady())
   {
-    //Считывание датчиков
-    A_bar = A_bar + analogRead(PA0); //Считывание давления С PA0
+    // Считывание датчиков
+    A_bar = A_bar + analogRead(PA0); // Считывание давления С PA0
     tik++;
 
     // расчет давления, управление Мощьностью насоса
@@ -489,7 +489,7 @@ void loop()
             i = i + 15;
           }
         }
-        //Отключение при достежений давления
+        // Отключение при достежений давления
 
         if (raz_bar <= -0.15)
         {
@@ -500,7 +500,7 @@ void loop()
           sinh();
           imstop();
         }
-        //Дакачка при нулевом расходе
+        // Дакачка при нулевом расходе
         if (water == 0 && i != 0)
         {
           if (i > 100)
@@ -520,7 +520,7 @@ void loop()
       }
     }
 
-    //Расчет расхода воды
+    // Расчет расхода воды
     if (rash_litr.isReady())
     {
       water = rash_tik;
@@ -557,10 +557,10 @@ void loop()
     analog.setTimeout(150);
   }
 
-  //Температура ***DS18B20**
+  // Температура ***DS18B20**
   if (Dallos.isReady())
   {
-    //проверка на ошибки
+    // проверка на ошибки
     error_davlenie();
     error_temperatura();
 
@@ -595,7 +595,7 @@ void loop()
       {
         digitalWrite(PB8, LOW);
       }
-      //ставим 0 если ошибка чтения
+      // ставим 0 если ошибка чтения
       if (dal_temp[0] > 200)
       {
         dal_temp[0] = 0;
@@ -632,11 +632,10 @@ void setup()
   analog.setTimeout(150);
   lsd_led.setTimeout(20000);
   lsdup.setTimeout(250);
-  //EEPROM_float_write(0, 0.2);
-  //EEPROM_float_write(4, 2.9);
- // EEPROM_float_write(8, 20000);
+  // EEPROM_float_write(0, 0.2);
+  // EEPROM_float_write(4, 2.9);
+  // EEPROM_float_write(8, 20000);
   gist = EEPROM_float_read(0);
-  set_bar =EEPROM_float_read(4);
+  set_bar = EEPROM_float_read(4);
   start = EEPROM_float_read(8);
-  
 }
